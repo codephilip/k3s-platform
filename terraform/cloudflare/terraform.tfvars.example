@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars and fill in. Or use env vars:
+#   export CLOUDFLARE_API_TOKEN=...
+#   export TF_VAR_zone_id=...
+#   export TF_VAR_domain=example.com
+#   export TF_VAR_ingress_ip=1.2.3.4
+
+cloudflare_api_token = ""
+zone_id              = "your-cloudflare-zone-id"
+domain               = "example.com"
+ingress_ip           = "1.2.3.4"
+subdomains           = ["*.apps", "*.api"]   # dev.apps.*, staging.apps.*, dev.api.*, etc. → ingress_ip
+proxied              = false    # true = orange cloud (proxy through CF)
