@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install kubectl (bundles kustomize)
-        uses: azure/setup-kubectl@v4
+        uses: azure/setup-kubectl@v5
         with:
           version: v1.30.0
       - name: Build env overlays
