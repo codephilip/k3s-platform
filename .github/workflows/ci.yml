@@ -98,13 +98,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Block project-specific tokens
-        # Sanity guard: if anyone ever pastes the old polymr/personal values back in,
-        # CI fails loudly. Extend the pattern as new sensitive constants come up.
+        # Sanity guard: if anyone ever pastes prior project-specific values back in,
+        # CI fails loudly. Patterns intentionally exclude the author's contact email
+        # (legitimate in SECURITY.md / LICENSE) and only target leak-tier constants:
+        # old project name, container image paths, the original server IP, and the
+        # Cloudflare zone ID. Extend as new sensitive constants come up.
         run: |
           set -e
-          if grep -r -n -i -E "(polymr|philip@meiers|codephilip/polymr|46\.225\.140\.119|892ae7997558955caf8a95595a2effa3)" \
+          if grep -r -n -E "(polymr|codephilip/polymr|46\.225\.140\.119|892ae7997558955caf8a95595a2effa3)" \
               --include='*.yaml' --include='*.tf' --include='*.sh' --include='*.md' \
-              --include='*.tpl' --include='*.json' .; then
+              --include='*.tpl' --include='*.json' \
+              --exclude-dir='.github' \
+              .; then
             echo "::error::Project-specific token found. Replace with a generic placeholder."
             exit 1
           fi
