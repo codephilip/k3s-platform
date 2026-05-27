@@ -1,0 +1,46 @@
+# --- Terraform ---
+# Local input files (contain API tokens, IPs, account IDs) — never commit.
+**/terraform.tfvars
+**/terraform.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+
+# State and providers (state can contain secrets in plaintext).
+**/terraform.tfstate
+**/terraform.tfstate.*
+**/.terraform/
+**/.terraform.lock.hcl
+crash.log
+crash.*.log
+
+# --- Kubernetes ---
+# Kubeconfigs embed bearer tokens / certs.
+kubeconfig
+kubeconfig.yaml
+kubeconfig.*.yaml
+**/kubeconfig
+**/kubeconfig.yaml
+**/kubeconfig.*.yaml
+
+# --- Secrets and env files ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+!*.public.key
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+*.kubeconfig
+*-secrets.yaml
+!example-*-secrets.yaml
+
+# --- Local junk ---
+.DS_Store
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
