@@ -1,0 +1,92 @@
+# Default values for example-app. Per-environment overrides live in
+# values-dev.yaml, values-staging.yaml, and values-prod.yaml.
+#
+# Deploy with:
+#   helm upgrade --install example-app charts/example-app \
+#     -n dev-apps -f charts/example-app/values-dev.yaml
+
+# Overrides the chart name (default is .Chart.Name = "example-app"). The release name
+# `example-app` and label selectors are derived from this — keep it stable across upgrades.
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  # Set this to your own registry/image — defaults to a public hello-world that proves
+  # ingress + TLS work without you having to publish anything.
+  repository: ghcr.io/nginxinc/nginx-unprivileged
+  tag: stable
+  pullPolicy: IfNotPresent
+
+# Pull secret for private registries. Create with:
+#   kubectl create secret docker-registry ghcr-pull -n <ns> --docker-server=ghcr.io \
+#     --docker-username=<user> --docker-password=<token>
+# Leave empty for public images.
+imagePullSecrets: []
+# - name: ghcr-pull
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 80
+  # Container port the app listens on.
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  # k3s ships with Traefik. Change to "nginx" if you replaced it.
+  className: traefik
+  annotations:
+    # Picks the prod issuer by default — values-dev.yaml switches to staging.
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  # Each host gets an Ingress rule and (if tls.enabled) a TLS entry.
+  hosts:
+    - host: app.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    enabled: true
+    # Leave empty to auto-derive secret name per host (recommended). Set to override.
+    secretName: ""
+
+# Liveness / readiness probes against the container's targetPort.
+probes:
+  enabled: true
+  path: /
+
+# Environment variables injected into the container. Use either `value` for literals
+# or `valueFrom` for secrets/configmaps. Mounted at runtime; not baked into the image.
+env: []
+# - name: LOG_LEVEL
+#   value: info
+# - name: DATABASE_URL
+#   valueFrom:
+#     secretKeyRef:
+#       name: app-secrets
+#       key: DATABASE_URL
+
+# Optional: mount the `app-secrets` Secret as env vars (created by
+# scripts/create-app-secrets-from-env.sh). The secret name `app-secrets` is referenced
+# from the helper script — keep it in sync if you rename.
+envFromSecret:
+  enabled: false
+  name: app-secrets
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

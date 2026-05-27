@@ -1,0 +1,9 @@
+apiVersion: v2
+name: example-app
+description: |
+  Minimal generic web app chart for the k3s platform. Deploy this as-is to verify
+  cluster + ingress + TLS work end-to-end, then fork it for your own application.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+kubeVersion: ">=1.21.0"

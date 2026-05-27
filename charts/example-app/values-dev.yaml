@@ -1,0 +1,24 @@
+# Dev environment overrides. Deploy into the `dev-apps` namespace.
+# Uses the Let's Encrypt **staging** issuer so cert rate-limits don't bite while iterating.
+
+replicaCount: 1
+
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  hosts:
+    - host: dev.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    enabled: true
+    secretName: ""
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 32Mi
+  limits:
+    cpu: 250m
+    memory: 128Mi

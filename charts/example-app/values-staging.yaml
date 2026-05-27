@@ -1,0 +1,24 @@
+# Staging environment overrides. Deploy into the `staging-apps` namespace.
+# Uses the Let's Encrypt **staging** issuer to mirror dev cert behavior.
+
+replicaCount: 1
+
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  hosts:
+    - host: staging.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    enabled: true
+    secretName: ""
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
