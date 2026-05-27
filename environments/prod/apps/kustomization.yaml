@@ -1,0 +1,4 @@
+# Prod app-layer Kustomize resources. See environments/dev/apps/kustomization.yaml.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources: []

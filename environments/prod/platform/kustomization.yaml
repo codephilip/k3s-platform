@@ -1,0 +1,4 @@
+# Monitoring: install kube-prometheus-stack in observability namespace via Helm.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources: []

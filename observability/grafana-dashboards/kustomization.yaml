@@ -1,0 +1,10 @@
+# ConfigMaps here are loaded by Grafana sidecar (kube-prometheus-stack).
+# Apply this with an environment so the dashboard appears in Grafana.
+namespace: observability
+configMapGenerator:
+  - name: grafana-dashboards-app
+    files:
+      - app-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"

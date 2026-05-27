@@ -1,0 +1,10 @@
+# Dev environment overlay.
+# Apply with: kubectl apply -k environments/dev
+#
+# By default this picks up the Grafana dashboards ConfigMap so monitoring works end-to-end.
+# Remove the grafana-dashboards line if you're not running kube-prometheus-stack.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - apps
+  - ../../observability/grafana-dashboards

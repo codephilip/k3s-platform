@@ -1,0 +1,11 @@
+# Dev app-layer Kustomize resources.
+#
+# The app itself is deployed via Helm (charts/example-app), not Kustomize. This overlay
+# is for extra resources that aren't in the chart — e.g. ExternalSecrets, manual
+# ConfigMaps, NetworkPolicies, or hand-written Ingresses for non-charted services.
+#
+# The app-secrets Secret is generated locally (see app-secrets.example.yaml) and is
+# *not* included here, so it never ends up in git.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources: []
