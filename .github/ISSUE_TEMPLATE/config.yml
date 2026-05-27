@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/codephilip/k3s-platform/discussions
+    about: For questions or open-ended discussion. Issues are for bugs and concrete feature requests.
+  - name: Security vulnerability
+    url: https://github.com/codephilip/k3s-platform/security/advisories/new
+    about: Report security issues privately. Do not open a public issue.

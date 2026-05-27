@@ -48,7 +48,7 @@ resource "hcloud_server" "node" {
   location    = var.location
   image       = var.image
 
-  ssh_keys = [hcloud_ssh_key.default.id]
+  ssh_keys     = [hcloud_ssh_key.default.id]
   firewall_ids = [hcloud_firewall.k3s.id]
 
   # Optional: install k3s via user_data (cloud-init). Uncomment and add your install script.

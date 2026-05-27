@@ -1,0 +1,43 @@
+name: Bug report
+description: Something in this repo (manifests, charts, scripts, terraform) doesn't behave as documented.
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please don't paste tokens, IPs, or kubeconfigs into this
+        issue — they get indexed and cached. Redact before posting.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect to see, what did you actually see?
+      placeholder: |
+        1. Ran `./scripts/install-bootstrap-helm.sh you@example.com`
+        2. Expected: cert-manager installed.
+        3. Saw: helm exited with "could not find a ready..."
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands so the bug can be triggered on a clean cluster.
+      render: bash
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Tool versions
+      description: kubectl / helm / terraform / k3s versions.
+      placeholder: "kubectl v1.30.0, helm v3.15.0, terraform 1.8.5, k3s v1.30.1+k3s1"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or output
+      description: Trim to just the failing portion. Wrap in code fences.
+      render: text

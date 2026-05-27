@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Cancel in-progress runs when a new commit lands on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  helm:
+    name: helm lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.15.0
+      - name: Lint example-app chart
+        run: helm lint charts/example-app
+      - name: Lint platform-bootstrap chart
+        # Pass a placeholder acmeEmail so the required-value gate doesn't fail the lint.
+        run: helm lint helm/platform-bootstrap --set acmeEmail=ci@example.com
+      - name: Render example-app for each env
+        run: |
+          set -e
+          for env in dev staging prod; do
+            echo "--- $env ---"
+            helm template example-app charts/example-app \
+              -f charts/example-app/values-$env.yaml > /dev/null
+          done
+      - name: Render platform-bootstrap
+        run: helm template platform-bootstrap helm/platform-bootstrap --set acmeEmail=ci@example.com > /dev/null
+
+  kustomize:
+    name: kustomize build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install kubectl (bundles kustomize)
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.30.0
+      - name: Build env overlays
+        run: |
+          set -e
+          for env in dev staging prod; do
+            echo "--- environments/$env ---"
+            kubectl kustomize "environments/$env" > /dev/null
+          done
+      - name: Build cluster-bootstrap (Kustomize fallback path)
+        run: kubectl kustomize cluster-bootstrap > /dev/null
+
+  terraform:
+    name: terraform fmt + validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module: [hetzner, cloudflare, dns, networking]
+    defaults:
+      run:
+        working-directory: terraform/${{ matrix.module }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.5
+      - name: terraform fmt
+        run: terraform fmt -check -recursive
+      - name: terraform init (no backend)
+        run: terraform init -backend=false
+      - name: terraform validate
+        run: terraform validate
+
+  shell:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: ./scripts
+          severity: warning
+
+  secrets-scan:
+    name: leaked-secret guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block project-specific tokens
+        # Sanity guard: if anyone ever pastes the old polymr/personal values back in,
+        # CI fails loudly. Extend the pattern as new sensitive constants come up.
+        run: |
+          set -e
+          if grep -r -n -i -E "(polymr|philip@meiers|codephilip/polymr|46\.225\.140\.119|892ae7997558955caf8a95595a2effa3)" \
+              --include='*.yaml' --include='*.tf' --include='*.sh' --include='*.md' \
+              --include='*.tpl' --include='*.json' .; then
+            echo "::error::Project-specific token found. Replace with a generic placeholder."
+            exit 1
+          fi
+          echo "Clean."

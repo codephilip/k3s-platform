@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest an addition or change that would make the platform more useful to most users.
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the use case, not the solution. "I'm trying to X" is a stronger starting point than "let's add Y".
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: What would the repo look like after this is in? Files added, commands changed, configurations enabled.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What did you rule out and why? Helps justify scope and avoid back-and-forth.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      description: This repo is a small, opinionated reference. Features that only apply to one project are usually better as a fork.
+      options:
+        - label: This change would help most users of this template, not just my specific stack.
+          required: true
