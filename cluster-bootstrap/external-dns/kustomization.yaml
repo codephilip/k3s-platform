@@ -1,0 +1,12 @@
+# External DNS auto-creates DNS records from Ingress/Service annotations.
+#
+# This kustomization is empty by default because external-dns-application.yaml is an
+# Argo CD Application and requires Argo CD to be installed. To enable:
+#   1. Install Argo CD in the cluster.
+#   2. Create the `cloudflare-api-token` Secret in the external-dns namespace.
+#   3. Add `external-dns-application.yaml` to the resources list below.
+#
+# Or skip Argo CD entirely and install with `helm install` — see README.md.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources: []

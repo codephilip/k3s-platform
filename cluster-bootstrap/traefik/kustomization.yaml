@@ -1,0 +1,6 @@
+# k3s includes Traefik; standard Ingress with ingressClassName: traefik works.
+# Optional: add ConfigMap or IngressRoute resources to tune Traefik.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - traefik-ingress-options.yaml

@@ -1,0 +1,15 @@
+# ACME email for Let's Encrypt ClusterIssuers. **Required** — chart install fails if empty.
+# Used by Let's Encrypt to email you about cert expiry and policy updates.
+acmeEmail: ""
+
+# Namespaces to create (dev-apps, staging-apps, prod-apps, observability).
+# cert-manager namespace is created by the cert-manager Helm chart.
+namespaces:
+  - name: dev-apps
+    labels: { app.kubernetes.io/name: dev-apps }
+  - name: staging-apps
+    labels: { app.kubernetes.io/name: staging-apps }
+  - name: prod-apps
+    labels: { app.kubernetes.io/name: prod-apps }
+  - name: observability
+    labels: { app.kubernetes.io/name: observability }

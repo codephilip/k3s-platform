@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# cert-manager controller: use official release (requires network when building).
+# ClusterIssuers are applied separately after bootstrap so CRDs are ready:
+#   kubectl apply -f platform/cluster-bootstrap/cert-manager/cluster-issuer.yaml
+resources:
+  - https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml

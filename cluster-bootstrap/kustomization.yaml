@@ -1,0 +1,19 @@
+# Root cluster bootstrap (Kustomize-only path). Most users should prefer the Helm path:
+#   ./scripts/install-bootstrap-helm.sh
+# which installs cert-manager + namespaces + ClusterIssuers in one command.
+#
+# This Kustomize version is the fallback when you don't want Helm. After applying:
+#   kubectl apply -k cluster-bootstrap
+# you must then apply the ClusterIssuers separately so cert-manager CRDs exist first:
+#   kubectl apply -f cluster-bootstrap/cert-manager/cluster-issuer.yaml
+# (Remember to set the email in that file before applying.)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespaces
+  - cert-manager
+  - traefik
+  # Optional: uncomment to deploy external-dns (requires provider secret first)
+  # - external-dns
+  # Optional: uncomment for External Secrets Operator
+  # - external-secrets

@@ -1,0 +1,31 @@
+# Core namespaces for k3s + ingress + certs drop-in.
+# Customize or add more as needed for your project.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev-apps
+  labels:
+    app.kubernetes.io/name: dev-apps
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: staging-apps
+  labels:
+    app.kubernetes.io/name: staging-apps
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-apps
+  labels:
+    app.kubernetes.io/name: prod-apps
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    app.kubernetes.io/name: observability
+# cert-manager namespace is created by the official cert-manager manifest (cluster-bootstrap/cert-manager).

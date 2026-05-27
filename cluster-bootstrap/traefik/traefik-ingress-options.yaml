@@ -1,0 +1,13 @@
+# k3s ships with Traefik (ingressClassName: traefik). Use standard Ingress + cert-manager.io/cluster-issuer for TLS.
+# Placeholder so this component is not empty; add IngressRoute CRDs or Helm values here if you customize Traefik.
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-bootstrap-placeholder
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: traefik
+data:
+  README: |
+    k3s uses Traefik. Ingress with ingressClassName traefik and cert-manager ClusterIssuer works out of the box.

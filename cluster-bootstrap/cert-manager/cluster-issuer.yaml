@@ -1,0 +1,40 @@
+# Let's Encrypt ClusterIssuers for TLS certs on ingress.
+# Ingress should use: cert-manager.io/cluster-issuer: "letsencrypt-prod" (or letsencrypt-staging).
+#
+# *** REQUIRED: replace `you@example.com` below with a real email before applying. ***
+# Let's Encrypt uses this email for cert-expiry and policy notifications and rate-limits
+# unverifiable addresses. The issuer names (`letsencrypt-staging`, `letsencrypt-prod`) are
+# referenced by Ingress annotations elsewhere — do not rename without updating those.
+#
+# Prefer the Helm chart at helm/platform-bootstrap if you can — it parameterises the email
+# and won't render without it. This raw file is the fallback for Kustomize-only setups.
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: you@example.com   # REQUIRED: set your email
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    solvers:
+      - http01:
+          ingress:
+            class: traefik
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: you@example.com   # REQUIRED: set your email
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      - http01:
+          ingress:
+            class: traefik
