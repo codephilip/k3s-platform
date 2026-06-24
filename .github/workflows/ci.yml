@@ -20,7 +20,7 @@ jobs:
     name: helm lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: azure/setup-helm@v5
         with:
           version: v3.15.0
@@ -44,7 +44,7 @@ jobs:
     name: kustomize build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install kubectl (bundles kustomize)
         uses: azure/setup-kubectl@v5
         with:
@@ -70,7 +70,7 @@ jobs:
       run:
         working-directory: terraform/${{ matrix.module }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: 1.8.5
@@ -85,7 +85,7 @@ jobs:
     name: shellcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Run shellcheck
         uses: ludeeus/action-shellcheck@2.0.0
         with:
@@ -96,7 +96,7 @@ jobs:
     name: leaked-secret guard
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Block project-specific tokens
         # Sanity guard: if anyone ever pastes prior project-specific values back in,
         # CI fails loudly. Patterns intentionally exclude the author's contact email
